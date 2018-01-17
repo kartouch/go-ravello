@@ -2,8 +2,6 @@ package ravello
 
 import (
 	"bytes"
-	"encoding/base64"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -13,12 +11,11 @@ const baseURL = "https://cloud.ravellosystems.com/api/v1"
 
 //Handler takes care of requesting the data to Ravello
 func handler(verb string, endpoint string, data []byte) (body []byte, err error) {
-	b := base64.StdEncoding.EncodeToString([]byte(os.Getenv("RAVELLO_USER") + ":" + os.Getenv("RAVELLO_PWD")))
 	req, err := http.NewRequest(verb, baseURL+endpoint, bytes.NewBuffer(data))
 	if err != nil {
 		return
 	}
-	req.Header.Set("Authorization", fmt.Sprintf("Basic %v", b))
+	req.SetBasicAuth(os.Getenv("RAVELLO_USER"), os.Getenv("RAVELLO_PWD"))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Connection", "close")
