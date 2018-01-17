@@ -21,6 +21,13 @@ type Application struct {
 	Version                     uint64        `json:"version,omitempty"`
 	NextStopTask                *NextStopTask `json:"nextStopTask,omitempty"`
 	CostBucket                  *CostBucket   `json:"costBucket,omitempty"`
+	Deployment                  *Deployment   `json:"deployment,omitempty"`
+}
+
+// Deployment specifics for an application
+type Deployment struct {
+	TotalActiveVms int `json:"totalActiveVms,omitempty"`
+	TotalErrorVms  int `json:"totalErrorVms,omitempty"`
 }
 
 //CostBucket tracking struct
@@ -87,6 +94,11 @@ type Preference struct {
 	StartAllVms       string `json:"startAllVms,omitempty"`
 }
 
+// FQDN returns fqdn for a VM
+type FQDN struct {
+	Value string `json:"value,omitempty"`
+}
+
 // GetApplicationsList returns list of applications
 func GetApplicationsList() (apps []Application, err error) {
 	r, err := handler("GET", "/applications", nil)
@@ -133,14 +145,14 @@ func GetVMSList(id uint64) (vms []VM, err error) {
 
 // GetVM returns a single vm properties for a given application id
 // Hardcoded deployment endpoint
-func GetVM(id int64, vmID int64) (vm VM, err error) {
+func GetVM(id uint64, vmID uint64) (vm VM, err error) {
 	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+";deployment", nil)
 	json.Unmarshal(r, &vm)
 	return
 }
 
 // SetApplicationExpirationTime sets the expiration time for a given application id
-func SetApplicationExpirationTime(id int64, time int) (err error) {
+func SetApplicationExpirationTime(id uint64, time int) (err error) {
 	j, _ := json.Marshal(ExpirationTime{ExpirationTimeFromNowSeconds: time})
 	_, err = handler("POST", "/applications/"+strconv.Itoa(int(id))+"/setExpiration", j)
 	return
@@ -148,9 +160,16 @@ func SetApplicationExpirationTime(id int64, time int) (err error) {
 
 // GetVMVncURL returns the VNC url for a VM in a given application
 // URL lifetime is 1 minute
-func GetVMVncURL(id int64, vmID int64) (url string, err error) {
+func GetVMVncURL(id uint64, vmID uint64) (url string, err error) {
 	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+"/vncUrl", nil)
 	url = string(r)
+	return
+}
+
+// GetFQDN returns the fqdn for a VM in a given application
+func GetFQDN(id uint64, vmID uint64) (f FQDN, err error) {
+	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+"/fqdn;deployment", nil)
+	json.Unmarshal(r, &f)
 	return
 }
 
