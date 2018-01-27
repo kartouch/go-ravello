@@ -132,7 +132,7 @@ func PublishApplication(id uint64, prefs []byte) (err error) {
 // start,stop,restart,resetDisks
 func ExecuteApplicatonAction(id uint64, action string) (ar ActionResult, err error) {
 	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/"+action, nil)
-	json.Unmarshal(r, &ar)
+	json.Unmarshal(r, ar)
 	return
 }
 
