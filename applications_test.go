@@ -119,6 +119,17 @@ func TestGetFQDN(t *testing.T) {
 
 }
 
+func TestExecuteApplicatonAction(t *testing.T) {
+	action, err := ExecuteApplicatonAction(appID, "stop")
+	if err != nil {
+		t.Fatalf("could not request action: %v", err)
+	}
+
+	if action.CompletedSuccessfuly != "true" {
+		t.Fatal("could not complete request action")
+	}
+}
+
 func TestDeleteApplication(t *testing.T) {
 	err := DeleteApplication(appID)
 	if err != nil {
