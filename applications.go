@@ -3,6 +3,7 @@ package ravello
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"strconv"
 	"time"
 )
@@ -101,28 +102,28 @@ type FQDN struct {
 
 // GetApplicationsList returns list of applications
 func GetApplicationsList() (apps []Application, err error) {
-	r, err := handler("GET", "/applications", nil)
+	r, err := handler(http.MethodGet, "/applications", nil)
 	json.Unmarshal(r, &apps)
 	return apps, err
 }
 
 // GetApplication returns application details
 func GetApplication(id uint64) (a Application, err error) {
-	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id)), nil)
+	r, err := handler(http.MethodGet, "/applications/"+strconv.Itoa(int(id)), nil)
 	json.Unmarshal(r, &a)
 	return
 }
 
 // CreateApplication creates a new application
 func CreateApplication(data []byte) (a Application, err error) {
-	r, err := handler("POST", "/applications/", data)
+	r, err := handler(http.MethodPost, "/applications/", data)
 	json.Unmarshal(r, &a)
 	return
 }
 
 // PublishApplication publishes the application
 func PublishApplication(id uint64, data []byte) (err error) {
-	r, err := handler("POST", "/applications/"+strconv.Itoa(int(id))+"/publish", data)
+	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/publish", data)
 	fmt.Println(string(r))
 	return
 }
@@ -130,7 +131,7 @@ func PublishApplication(id uint64, data []byte) (err error) {
 // ExecuteApplicatonAction with possible action :
 // start,stop,restart,resetDisks
 func ExecuteApplicatonAction(id uint64, action string) (ar ActionResult, err error) {
-	r, err := handler("POST", "/applications/"+strconv.Itoa(int(id))+"/"+action, nil)
+	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/"+action, nil)
 	json.Unmarshal(r, &ar)
 	return
 }
@@ -138,7 +139,7 @@ func ExecuteApplicatonAction(id uint64, action string) (ar ActionResult, err err
 // GetVMSList returns the vms for a given application id
 // Hardcoded deployment endpoint
 func GetVMSList(id uint64) (vms []VM, err error) {
-	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id))+"/vms;deployment", nil)
+	r, err := handler(http.MethodGet, "/applications/"+strconv.Itoa(int(id))+"/vms;deployment", nil)
 	json.Unmarshal(r, &vms)
 	return
 }
@@ -146,7 +147,7 @@ func GetVMSList(id uint64) (vms []VM, err error) {
 // GetVM returns a single vm properties for a given application id
 // Hardcoded deployment endpoint
 func GetVM(id uint64, vmID uint64) (vm VM, err error) {
-	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+";deployment", nil)
+	r, err := handler(http.MethodGet, "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+";deployment", nil)
 	json.Unmarshal(r, &vm)
 	return
 }
@@ -154,27 +155,27 @@ func GetVM(id uint64, vmID uint64) (vm VM, err error) {
 // SetApplicationExpirationTime sets the expiration time for a given application id
 func SetApplicationExpirationTime(id uint64, time int) (err error) {
 	j, _ := json.Marshal(ExpirationTime{ExpirationTimeFromNowSeconds: time})
-	_, err = handler("POST", "/applications/"+strconv.Itoa(int(id))+"/setExpiration", j)
+	_, err = handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/setExpiration", j)
 	return
 }
 
 // GetVMVncURL returns the VNC url for a VM in a given application
 // URL lifetime is 1 minute
 func GetVMVncURL(id uint64, vmID uint64) (url string, err error) {
-	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+"/vncUrl", nil)
+	r, err := handler(http.MethodGet, "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+"/vncUrl", nil)
 	url = string(r)
 	return
 }
 
 // GetFQDN returns the fqdn for a VM in a given application
 func GetFQDN(id uint64, vmID uint64) (f FQDN, err error) {
-	r, err := handler("GET", "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+"/fqdn;deployment", nil)
+	r, err := handler(http.MethodGet, "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+"/fqdn;deployment", nil)
 	json.Unmarshal(r, &f)
 	return
 }
 
 // DeleteApplication deletes a given application
 func DeleteApplication(id uint64) (err error) {
-	_, err = handler("DELETE", "/applications/"+strconv.Itoa(int(id)), nil)
+	_, err = handler(http.MethodDelete, "/applications/"+strconv.Itoa(int(id)), nil)
 	return
 }

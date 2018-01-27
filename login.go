@@ -2,6 +2,7 @@ package ravello
 
 import (
 	"encoding/json"
+	"net/http"
 )
 
 //User are objects responses from login endpoint
@@ -20,7 +21,7 @@ type User struct {
 
 //Login returns user details
 func Login() (u User, err error) {
-	data, err := handler("POST", "/login", nil)
+	data, err := handler(http.MethodPost, "/login", nil)
 	json.Unmarshal(data, &u)
 	return
 }
