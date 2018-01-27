@@ -122,8 +122,8 @@ func CreateApplication(data []byte) (a Application, err error) {
 }
 
 // PublishApplication publishes the application
-func PublishApplication(id uint64, data []byte) (err error) {
-	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/publish", data)
+func PublishApplication(id uint64, prefs []byte) (err error) {
+	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/publish", prefs)
 	fmt.Println(string(r))
 	return
 }
