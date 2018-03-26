@@ -10,19 +10,16 @@ import (
 
 // Application are applications properties
 type Application struct {
-	ID                          uint64        `json:"id,omitempty"`
-	Name                        string        `json:"name,omitempty"`
-	Owner                       string        `json:"owner,omitempty"`
-	Description                 string        `json:"description,omitempty"`
-	BaseBlueprintID             int           `json:"baseBlueprintId,omitempty"`
-	BlueprintName               string        `json:"blueprintName,omitempty"`
-	DesignDiffersFromDeployment bool          `json:"designDiffersFromDeployment,omitempty"`
-	Published                   bool          `json:"published,omitempty"`
-	CreationTime                uint8         `json:"creationTime,omitempty"`
-	Version                     uint64        `json:"version,omitempty"`
-	NextStopTask                *NextStopTask `json:"nextStopTask,omitempty"`
-	CostBucket                  *CostBucket   `json:"costBucket,omitempty"`
-	Deployment                  *Deployment   `json:"deployment,omitempty"`
+	ID              uint64 `json:"id"`
+	Name            string `json:"name"`
+	Owner           string `json:"owner,omitempty"`
+	Description     string `json:"description,omitempty"`
+	BaseBlueprintID int    `json:"baseBlueprintId,omitempty"`
+	BlueprintName   string `json:"blueprintName,omitempty"`
+	Published       bool   `json:"published,omitempty"`
+	//NextStopTask *NextStopTask `json:"nextStopTask,omitempty"`
+	CostBucket *CostBucket `json:"costBucket,omitempty"`
+	Deployment *Deployment `json:"deployment,omitempty"`
 }
 
 // Deployment specifics for an application
