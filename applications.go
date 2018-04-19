@@ -127,7 +127,7 @@ func PublishApplication(id uint64, prefs []byte) (err error) {
 // ExecuteApplicatonAction with possible action :
 // start,stop,restart,resetDisks
 func ExecuteApplicatonAction(id uint64, vmID uint64, action string) (ar ActionResult, err error) {
-	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/vms"+strconv.Itoa(int(vmID))+"/"+action, nil)
+	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/vms/"+strconv.Itoa(int(vmID))+"/"+action, nil)
 	json.Unmarshal(r, ar)
 	return
 }
