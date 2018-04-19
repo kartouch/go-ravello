@@ -10,16 +10,15 @@ import (
 
 // Application are applications properties
 type Application struct {
-	ID              uint64 `json:"id"`
-	Name            string `json:"name"`
-	Owner           string `json:"owner,omitempty"`
-	Description     string `json:"description,omitempty"`
-	BaseBlueprintID int    `json:"baseBlueprintId,omitempty"`
-	BlueprintName   string `json:"blueprintName,omitempty"`
-	Published       bool   `json:"published,omitempty"`
-	//NextStopTask *NextStopTask `json:"nextStopTask,omitempty"`
-	CostBucket *CostBucket `json:"costBucket,omitempty"`
-	Deployment *Deployment `json:"deployment,omitempty"`
+	ID              uint64      `json:"id"`
+	Name            string      `json:"name"`
+	Owner           string      `json:"owner,omitempty"`
+	Description     string      `json:"description,omitempty"`
+	BaseBlueprintID int         `json:"baseBlueprintId,omitempty"`
+	BlueprintName   string      `json:"blueprintName,omitempty"`
+	Published       bool        `json:"published,omitempty"`
+	CostBucket      *CostBucket `json:"costBucket,omitempty"`
+	Deployment      *Deployment `json:"deployment,omitempty"`
 }
 
 // Deployment specifics for an application
@@ -127,8 +126,8 @@ func PublishApplication(id uint64, prefs []byte) (err error) {
 
 // ExecuteApplicatonAction with possible action :
 // start,stop,restart,resetDisks
-func ExecuteApplicatonAction(id uint64, action string) (ar ActionResult, err error) {
-	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/"+action, nil)
+func ExecuteApplicatonAction(id uint64, vmID uint64, action string) (ar ActionResult, err error) {
+	r, err := handler(http.MethodPost, "/applications/"+strconv.Itoa(int(id))+"/vms"+strconv.Itoa(int(vmID))+"/"+action, nil)
 	json.Unmarshal(r, ar)
 	return
 }
