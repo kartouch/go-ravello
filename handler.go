@@ -2,7 +2,6 @@ package ravello
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -24,7 +23,7 @@ func handler(method string, endpoint string, data []byte) (body []byte, err erro
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if resp.StatusCode != http.StatusOK {
-		err = errors.New(fmt.Sprintf("%v", resp))
+		err = fmt.Errorf("%v", resp)
 		return
 	}
 
