@@ -3,6 +3,7 @@ package ravello
 import (
 	"bytes"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -23,6 +24,10 @@ func handler(method string, endpoint string, data []byte) (body []byte, err erro
 	resp, err := client.Do(req)
 	if err != nil {
 		return
+	}
+
+	if os.Getenv("RAVELLO_DEBUG") == "1" {
+		log.Println(resp)
 	}
 
 	body, err = ioutil.ReadAll(resp.Body)
