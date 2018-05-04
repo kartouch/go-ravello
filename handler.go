@@ -2,7 +2,6 @@ package ravello
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -22,8 +21,7 @@ func handler(method string, endpoint string, data []byte) (body []byte, err erro
 	req.Header.Set("Connection", "close")
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	if resp.StatusCode != http.StatusOK {
-		err = fmt.Errorf("%v", resp)
+	if err != nil {
 		return
 	}
 
